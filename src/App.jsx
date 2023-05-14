@@ -1,10 +1,9 @@
+import React from 'react'
 
-function App () {
-  return (
-    <>
-      <h1 className='w-full lg:w-1/2 text-center text-4xl'>Hola</h1>
-    </>
-  )
+export default function App() {
+	return (
+		<div className=" bg-black text-center text-white lg:w-12">
+			<h1>Hola</h1>
+		</div>
+	)
 }
-
-export default App
