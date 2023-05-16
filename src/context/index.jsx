@@ -1,5 +1,5 @@
 import { PropTypes } from 'prop-types'
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 export const ProductContext = createContext()
 
@@ -8,11 +8,10 @@ export default function ProductProvider({ children }) {
 	const [cart, setCart] = useState([])
 	const [total, setTotal] = useState(0)
 
-	/* 	const [quantityProducts, setQuantityProducts] = useState(0) */
+	const [quantityProducts, setQuantityProducts] = useState(0)
 
 	const addToCart = (product) => {
-		const existingItem = cart.find((item) => item.id === product.id)
-		console.log(existingItem)
+		const existingItem = cart?.find((item) => item.id === product.id)
 		if (existingItem) {
 			const updatedItems = cart.map((item) => {
 				if (item.id === product.id) {
@@ -26,20 +25,40 @@ export default function ProductProvider({ children }) {
 			const newItem = { ...product, quantity: 1 }
 			setCart([...cart, newItem])
 		}
-		/* 	setCart([...cart, product])
-		sumTotal() */
-
+	}
+	useEffect(() => {
+		sumQuantityProducts()
 		sumTotal()
-	}
+	}, [cart])
+
 	const sumTotal = () => {
-		setTotal(cart.reduce((acc, product) => acc + product.price, 0))
+		const subtotals = cart.map(
+			(product) => product.price * product.quantity
+		)
+		const total = subtotals.reduce(
+			(acc, subtotal) => acc + subtotal,
+			0
+		)
+		setTotal(total)
 	}
+
+	const sumQuantityProducts = () => {
+		const quantityProducts = cart.reduce(
+			(total, product) => total + product.quantity,
+			0
+		)
+		setQuantityProducts(quantityProducts)
+	}
+
 	const valueContext = {
 		selectedProduct,
 		setSelectedProduct,
 		cart,
+		setCart,
 		addToCart,
-		total
+		sumTotal,
+		total,
+		quantityProducts
 	}
 
 	/* prettier-ignore */

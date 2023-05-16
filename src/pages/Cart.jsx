@@ -1,18 +1,16 @@
 import { PropTypes } from 'prop-types'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ProductContext } from '../context'
 
 export default function Cart() {
-	const { cart, total } = useContext(ProductContext)
-	console.log(total)
-
+	const { cart, total, quantityProducts } = useContext(ProductContext)
 	return (
 		<section>
 			<div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
 				<div className="mx-auto max-w-3xl">
 					<header className="text-center">
 						<h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-							{`Carrito(${cart.length})`}
+							{`Carrito(${quantityProducts})`}
 						</h1>
 					</header>
 					<div className="mt-8">
@@ -42,7 +40,41 @@ export default function Cart() {
 	)
 }
 
-export function CartProduct({ title, price, image, quantity }) {
+export function CartProduct({
+	title,
+	price,
+	image,
+	quantity: quantityProp
+}) {
+	const { cart, setCart } = useContext(ProductContext)
+	const [quantity, setQuantity] = useState(quantityProp)
+	const [subtotal, setSubtotal] = useState(0)
+	const handleDecrease = () => {
+		if (quantity > 1) {
+			setQuantity(quantity - 1)
+			updateCart(quantity - 1)
+		}
+	}
+
+	const handleIncrease = () => {
+		setQuantity(quantity + 1)
+		updateCart(quantity + 1)
+	}
+	const updateCart = (newQuantity) => {
+		const updatedCart = cart.map((product) => {
+			if (product.title === title) {
+				return { ...product, quantity: newQuantity }
+			}
+			return product
+		})
+		setCart(updatedCart)
+	}
+	useEffect(() => {
+		const newSubtotal = price * quantity
+		console.log(newSubtotal)
+		setSubtotal(newSubtotal)
+	}, [price, quantity])
+
 	return (
 		<li className="flex items-center gap-4">
 			<img
@@ -56,17 +88,13 @@ export function CartProduct({ title, price, image, quantity }) {
 			</div>
 			<div className="flex flex-1 items-center justify-end gap-2">
 				<div>
-					<label htmlFor="Quantity" className="sr-only">
-						{' '}
-						Quantity{' '}
-					</label>
-
 					<div className="flex items-center rounded border border-gray-200">
 						<button
 							type="button"
 							className="h-10 w-10 leading-10 text-gray-600 transition hover:opacity-75"
+							onClick={handleDecrease}
 						>
-							&minus;
+							-
 						</button>
 
 						<span>{quantity}</span>
@@ -74,10 +102,12 @@ export function CartProduct({ title, price, image, quantity }) {
 						<button
 							type="button"
 							className="h-10 w-10 leading-10 text-gray-600 transition hover:opacity-75"
+							onClick={handleIncrease}
 						>
-							&plus;
+							+
 						</button>
 					</div>
+					<span>Subtotal: ${subtotal}</span>
 				</div>
 
 				<button className="text-gray-600 transition hover:text-red-600">
