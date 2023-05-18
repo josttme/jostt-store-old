@@ -41,12 +41,13 @@ export default function Cart() {
 }
 
 export function CartProduct({
+	id,
 	title,
 	price,
 	image,
 	quantity: quantityProp
 }) {
-	const { cart, setCart } = useContext(ProductContext)
+	const { cart, setCart, removeProduct } = useContext(ProductContext)
 	const [quantity, setQuantity] = useState(quantityProp)
 	const [subtotal, setSubtotal] = useState(0)
 	const handleDecrease = () => {
@@ -110,7 +111,10 @@ export function CartProduct({
 					<span>Subtotal: ${subtotal}</span>
 				</div>
 
-				<button className="text-gray-600 transition hover:text-red-600">
+				<button
+					onClick={() => removeProduct(id)}
+					className="text-gray-600 transition hover:text-red-600"
+				>
 					<span className="sr-only">Remove item</span>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -132,6 +136,7 @@ export function CartProduct({
 	)
 }
 CartProduct.propTypes = {
+	id: PropTypes.number.isRequired,
 	title: PropTypes.string.isRequired,
 	price: PropTypes.number.isRequired,
 	image: PropTypes.string.isRequired,

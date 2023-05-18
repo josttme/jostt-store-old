@@ -49,6 +49,11 @@ export default function ProductProvider({ children }) {
 		)
 		setQuantityProducts(quantityProducts)
 	}
+	const removeProduct = (id) => {
+		const updatedCart = cart.filter((product) => product.id !== id)
+		setCart(updatedCart)
+		console.log(updatedCart)
+	}
 
 	const valueContext = {
 		selectedProduct,
@@ -58,7 +63,8 @@ export default function ProductProvider({ children }) {
 		addToCart,
 		sumTotal,
 		total,
-		quantityProducts
+		quantityProducts,
+		removeProduct
 	}
 
 	/* prettier-ignore */
