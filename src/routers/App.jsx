@@ -4,6 +4,8 @@ import Product from '../pages/Product'
 import ProductProvider from '../context'
 import Layout from '../layout/Layout'
 import Cart from '../pages/Cart'
+import Favorites from '../pages/Favorites'
+import NotFound from '../pages/NotFound'
 
 export default function App() {
 	return (
@@ -12,9 +14,11 @@ export default function App() {
 				<Routes>
 					<Route path="/" element={<Layout />}>
 						<Route index element={<Home />} />
-						<Route path="/product/:id" element={<Product />} />
 						<Route path="/cart" element={<Cart />} />
+						<Route path="/product/:id" element={<Product />} />
+						<Route path="/favorites" element={<Favorites />} />
 					</Route>
+					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>
 		</ProductProvider>

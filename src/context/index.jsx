@@ -1,70 +1,47 @@
 import { PropTypes } from 'prop-types'
 import { createContext, useEffect, useState } from 'react'
+import { useFavotites } from '../hooks/useFavorites'
+import { useCart } from '../hooks/useCart'
 
 export const ProductContext = createContext()
 
 export default function ProductProvider({ children }) {
 	const [selectedProduct, setSelectedProduct] = useState([])
-	const [cart, setCart] = useState([])
-	const [total, setTotal] = useState(0)
-
 	const [quantityProducts, setQuantityProducts] = useState(0)
 
-	const addToCart = (product) => {
-		const existingItem = cart?.find((item) => item.id === product.id)
-		if (existingItem) {
-			const updatedItems = cart.map((item) => {
-				if (item.id === product.id) {
-					return { ...item, quantity: item.quantity + 1 }
-				}
-				return item
-			})
+	const [favoritos, toggleFavorites] = useFavotites('store_favorites')
+	const [
+		cartItems,
+		addToCart,
+		removeFromCart,
+		increaseQuantity,
+		decreaseQuantity
+	] = useCart('store_cart')
 
-			setCart(updatedItems)
-		} else {
-			const newItem = { ...product, quantity: 1 }
-			setCart([...cart, newItem])
-		}
+	const isFavorite = (product) => {
+		return favoritos.some((item) => item.id === product.id)
 	}
 	useEffect(() => {
-		sumQuantityProducts()
-		sumTotal()
-	}, [cart])
-
-	const sumTotal = () => {
-		const subtotals = cart.map(
-			(product) => product.price * product.quantity
+		// Suma el total de la cantidad de productos en el carrito
+		setQuantityProducts(
+			cartItems.reduce((setQuantityProducts, item) => {
+				return setQuantityProducts + item.quantity
+			}, 0)
 		)
-		const total = subtotals.reduce(
-			(acc, subtotal) => acc + subtotal,
-			0
-		)
-		setTotal(total)
-	}
-
-	const sumQuantityProducts = () => {
-		const quantityProducts = cart.reduce(
-			(total, product) => total + product.quantity,
-			0
-		)
-		setQuantityProducts(quantityProducts)
-	}
-	const removeProduct = (id) => {
-		const updatedCart = cart.filter((product) => product.id !== id)
-		setCart(updatedCart)
-		console.log(updatedCart)
-	}
+	}, [cartItems])
 
 	const valueContext = {
 		selectedProduct,
 		setSelectedProduct,
-		cart,
-		setCart,
+		favoritos,
+		toggleFavorites,
+		cartItems,
 		addToCart,
-		sumTotal,
-		total,
+		removeFromCart,
+		increaseQuantity,
+		decreaseQuantity,
 		quantityProducts,
-		removeProduct
+		isFavorite
 	}
 
 	/* prettier-ignore */

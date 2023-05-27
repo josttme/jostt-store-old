@@ -3,7 +3,14 @@ import { useContext, useEffect, useState } from 'react'
 import { ProductContext } from '../context'
 
 export default function Cart() {
-	const { cart, total, quantityProducts } = useContext(ProductContext)
+	const { cartItems, quantityProducts } = useContext(ProductContext)
+	const calculateCartTotalPrice = (cartItems) => {
+		return cartItems.reduce((totalPrice, item) => {
+			return totalPrice + item.price * item.quantity
+		}, 0)
+	}
+	const total = calculateCartTotalPrice(cartItems)
+
 	return (
 		<section>
 			<div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -15,7 +22,7 @@ export default function Cart() {
 					</header>
 					<div className="mt-8">
 						<ul className="space-y-4">
-							{cart.map((product) => (
+							{cartItems.map((product) => (
 								<CartProduct key={product.id} {...product} />
 							))}
 						</ul>
@@ -40,49 +47,23 @@ export default function Cart() {
 	)
 }
 
-export function CartProduct({
-	id,
-	title,
-	price,
-	image,
-	quantity: quantityProp
-}) {
-	const { cart, setCart, removeProduct } = useContext(ProductContext)
-	const [quantity, setQuantity] = useState(quantityProp)
+export function CartProduct(product) {
+	const { title, price, image, quantity } = product
+	const { removeFromCart, increaseQuantity, decreaseQuantity } =
+		useContext(ProductContext)
+
 	const [subtotal, setSubtotal] = useState(0)
-	const handleDecrease = () => {
-		if (quantity > 1) {
-			setQuantity(quantity - 1)
-			updateCart(quantity - 1)
-		}
-	}
 
-	const handleIncrease = () => {
-		setQuantity(quantity + 1)
-		updateCart(quantity + 1)
-	}
-	const updateCart = (newQuantity) => {
-		const updatedCart = cart.map((product) => {
-			if (product.title === title) {
-				return { ...product, quantity: newQuantity }
-			}
-			return product
-		})
-		setCart(updatedCart)
-	}
+	const decrease = () => decreaseQuantity(product)
+	const increase = () => increaseQuantity(product)
+	const removeProduct = () => removeFromCart(product)
+
 	useEffect(() => {
-		const newSubtotal = price * quantity
-		console.log(newSubtotal)
-		setSubtotal(newSubtotal)
-	}, [price, quantity])
-
+		setSubtotal(price * quantity)
+	}, [quantity])
 	return (
 		<li className="flex items-center gap-4">
-			<img
-				src={image}
-				alt={title}
-				className="h-16 w-16 rounded object-cover"
-			/>
+			<img src={image} alt={title} className="h-16 w-16 rounded object-cover" />
 			<div>
 				<h3 className="text-sm text-gray-900">{title}</h3>
 				<span>{`$${price}`}</span>
@@ -93,7 +74,7 @@ export function CartProduct({
 						<button
 							type="button"
 							className="h-10 w-10 leading-10 text-gray-600 transition hover:opacity-75"
-							onClick={handleDecrease}
+							onClick={decrease}
 						>
 							-
 						</button>
@@ -103,7 +84,7 @@ export function CartProduct({
 						<button
 							type="button"
 							className="h-10 w-10 leading-10 text-gray-600 transition hover:opacity-75"
-							onClick={handleIncrease}
+							onClick={increase}
 						>
 							+
 						</button>
@@ -112,7 +93,7 @@ export function CartProduct({
 				</div>
 
 				<button
-					onClick={() => removeProduct(id)}
+					onClick={removeProduct}
 					className="text-gray-600 transition hover:text-red-600"
 				>
 					<span className="sr-only">Remove item</span>

@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import { ProductContext } from '../context'
+import { Link } from 'react-router-dom'
 
 export default function Product() {
 	const { selectedProduct, addToCart } = useContext(ProductContext)
 	const { title, description, price, image } = selectedProduct
 	const addedToCart = () => {
+		console.log(selectedProduct)
 		addToCart(selectedProduct)
 	}
 	return (
@@ -16,12 +18,14 @@ export default function Product() {
 				<h1>{title}</h1>
 				<p>{description}</p>
 				<p>{`$${price}`}</p>
-				<button
-					onClick={addedToCart}
-					className="w-52 rounded-lg bg-blue-500 p-2 text-white"
-				>
-					Agregar al carrito
-				</button>
+				<Link to="/cart">
+					<button
+						onClick={addedToCart}
+						className="w-52 rounded-lg bg-blue-500 p-2 text-white"
+					>
+						Agregar al carrito
+					</button>
+				</Link>
 			</div>
 		</section>
 	)
