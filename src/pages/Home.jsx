@@ -7,7 +7,7 @@ import Card from '../components/Card.jsx'
 export default function Home() {
 	const { products } = getProducts()
 
-	const { favoritos, setSelectedProduct, toggleFavorites } =
+	const { isFavorite, setSelectedProduct, toggleFavorites } =
 		useContext(ProductContext)
 
 	const navigate = useNavigate()
@@ -20,12 +20,10 @@ export default function Home() {
 		e.stopPropagation()
 		toggleFavorites(product)
 	}
-	const isFavorite = (product) => {
-		return favoritos.some((item) => item.id === product.id)
-	}
+
 	return (
 		<div>
-			<section className="mx-auto grid max-w-5xl grid-cols-2 gap-4 md:grid-cols-3">
+			<section className="mx-auto grid max-w-5xl grid-cols-2 gap-4 py-11 md:grid-cols-3">
 				{products.map((product) => (
 					<Card
 						key={product.id}

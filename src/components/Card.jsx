@@ -12,7 +12,7 @@ export default function Card({
 	return (
 		<div
 			onClick={handleProduct}
-			className="max-w-sm cursor-pointer overflow-hidden rounded-lg bg-white shadow-xl transition duration-300 hover:shadow-2xl"
+			className="max-w-sm cursor-pointer overflow-hidden rounded-lg bg-white shadow-xl transition duration-300 hover:shadow-4xl"
 		>
 			<figure className="relative w-full">
 				<div className="absolute right-2 top-2">
@@ -35,7 +35,13 @@ export default function Card({
 						</svg>
 					</button>
 				</div>
-				<img className="h-full w-full" src={image} alt={title} />
+				<img
+					className="h-full w-full"
+					src={image}
+					alt={title}
+					width="200"
+					height="200"
+				/>
 				<span className="absolute bottom-0 left-0 m-2 rounded-lg bg-white/60 px-3 py-0.5 text-xs text-black">
 					Electronics
 				</span>
