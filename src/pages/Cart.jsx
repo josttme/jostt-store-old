@@ -1,6 +1,7 @@
 import { PropTypes } from 'prop-types'
 import { useContext, useEffect, useState } from 'react'
 import { ProductContext } from '../context'
+import { Link } from 'react-router-dom'
 
 export default function Cart() {
 	const { cartItems, quantityProducts } = useContext(ProductContext)
@@ -12,33 +13,29 @@ export default function Cart() {
 	const total = calculateCartTotalPrice(cartItems)
 
 	return (
-		<section>
-			<div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-				<div className="mx-auto max-w-3xl">
-					<header className="text-center">
-						<h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-							{`Carrito(${quantityProducts})`}
-						</h1>
-					</header>
-					<div className="mt-8">
-						<ul className="space-y-4">
-							{cartItems.map((product) => (
-								<CartProduct key={product.id} {...product} />
-							))}
-						</ul>
-						<div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
-							<div className="w-screen max-w-lg space-y-4">
-								<span className="">Total: {`$${total}`}</span>
+		<section className="pb-52">
+			<div className="mx-auto max-w-3xl px-4  pt-8  sm:px-6 sm:py-12 lg:px-8">
+				<section className="text-center">
+					<h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
+						{`Carrito(${quantityProducts})`}
+					</h1>
+				</section>
+				<div className="felx mt-8  flex-col">
+					<ul className="space-y-4">
+						{cartItems.map((product) => (
+							<CartProduct key={product.id} {...product} />
+						))}
+					</ul>
+					<div className="mt-12 flex flex-col gap-4 border-gray-100">
+						<span className="self-end text-xl">Total: {`$${total}`}</span>
 
-								<div className="flex justify-end">
-									<a
-										href="#"
-										className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
-									>
-										Checkout
-									</a>
-								</div>
-							</div>
+						<div className="w-28 self-end text-center ">
+							<a
+								href="#"
+								className="text-md block rounded  bg-gray-700 px-5 py-3 text-gray-100 transition hover:bg-gray-600"
+							>
+								Checkout
+							</a>
 						</div>
 					</div>
 				</div>
@@ -63,34 +60,42 @@ export function CartProduct(product) {
 	}, [quantity])
 	return (
 		<li className="flex items-center gap-4">
-			<img src={image} alt={title} className="h-16 w-16 rounded object-cover" />
-			<div>
-				<h3 className="text-sm text-gray-900">{title}</h3>
-				<span>{`$${price}`}</span>
-			</div>
-			<div className="flex flex-1 items-center justify-end gap-2">
-				<div>
-					<div className="flex items-center rounded border border-gray-200">
-						<button
-							type="button"
-							className="h-10 w-10 leading-10 text-gray-600 transition hover:opacity-75"
-							onClick={decrease}
-						>
-							-
-						</button>
-
-						<span>{quantity}</span>
-
-						<button
-							type="button"
-							className="h-10 w-10 leading-10 text-gray-600 transition hover:opacity-75"
-							onClick={increase}
-						>
-							+
-						</button>
-					</div>
-					<span>Subtotal: ${subtotal}</span>
+			<Link
+				to={`/product/${product.id}`}
+				className="flex gap-4 rounded-md p-2 "
+			>
+				<img
+					src={image}
+					alt={title}
+					className="w-h-16 h-16 rounded object-cover"
+				/>
+				<div className="grid place-content-center">
+					<h3 className="text-lg text-gray-900">{title}</h3>
+					<span className="text-xl">{`$${price}`}</span>
 				</div>
+			</Link>
+
+			<div className="flex flex-1 items-center justify-end gap-2">
+				<div className="grid h-12 grid-cols-3  place-content-center rounded-md border border-gray-200">
+					<button
+						type="button"
+						className="h-10 w-10  leading-10 text-gray-600 transition hover:opacity-75"
+						onClick={decrease}
+					>
+						-
+					</button>
+
+					<span className="w-10 text-center leading-10">{quantity}</span>
+
+					<button
+						type="button"
+						className="h-10 w-10 leading-10 text-gray-600 transition hover:opacity-75"
+						onClick={increase}
+					>
+						+
+					</button>
+				</div>
+				<span className="w-28 px-4 text-center text-xl">${subtotal}</span>
 
 				<button
 					onClick={removeProduct}
