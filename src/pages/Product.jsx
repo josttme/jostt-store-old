@@ -10,7 +10,7 @@ export default function Product() {
 	const isFavorited = isFavorite(selectedProduct)
 	const favorite = isFavorited ? 'fill-red-600 stroke-red-600' : 'fill-none'
 	return (
-		<section className="mx-auto mt-28 grid max-w-6xl grid-cols-2 gap-4 overflow-hidden  rounded-lg  bg-white shadow-lg">
+		<section className="mx-auto my-28 grid max-w-6xl grid-cols-2 gap-4 overflow-hidden  rounded-lg  bg-white shadow-lg">
 			<figure className="grid h-[570px] w-[570px] place-content-center shadow-lg">
 				<img src={image} alt={title} width={1000} height={1000} />
 			</figure>

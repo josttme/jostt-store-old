@@ -13,30 +13,30 @@ export default function Cart() {
 	const total = calculateCartTotalPrice(cartItems)
 
 	return (
-		<section className="pb-52">
+		<section className="flex-grow pb-52 ">
 			<div className="mx-auto max-w-3xl px-4  pt-8  sm:px-6 sm:py-12 lg:px-8">
 				<section className="text-center">
 					<h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
 						{`Carrito(${quantityProducts})`}
 					</h1>
 				</section>
-				<div className="felx mt-8  flex-col">
+				<div className="felx mt-8 flex-col">
 					<ul className="space-y-4">
 						{cartItems.map((product) => (
 							<CartProduct key={product.id} {...product} />
 						))}
 					</ul>
-					<div className="mt-12 flex flex-col gap-4 border-gray-100">
-						<span className="self-end text-xl">Total: {`$${total}`}</span>
+				</div>
+				<div className="mt-12 flex flex-col gap-4 border-gray-100">
+					<span className="self-end text-xl">Total: {`$${total}`}</span>
 
-						<div className="w-28 self-end text-center ">
-							<a
-								href="#"
-								className="text-md block rounded  bg-gray-700 px-5 py-3 text-gray-100 transition hover:bg-gray-600"
-							>
-								Checkout
-							</a>
-						</div>
+					<div className="self-end text-center ">
+						<button
+							type="button"
+							className="text-md block rounded  bg-gray-700 px-5 py-3 text-gray-100 transition hover:bg-gray-600"
+						>
+							Continuar compra
+						</button>
 					</div>
 				</div>
 			</div>
