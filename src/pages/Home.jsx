@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ProductContext } from '../context/index'
 import getProducts from '../api/index.js'
 import Card from '../components/Card.jsx'
+import { Search } from '../components/Search'
 
 export default function Home() {
 	const { products } = getProducts()
@@ -23,6 +24,7 @@ export default function Home() {
 
 	return (
 		<div>
+			<Search />
 			<section className="mx-auto grid max-w-5xl grid-cols-2 gap-4 py-11 md:grid-cols-3">
 				{products.map((product) => (
 					<Card
