@@ -1,38 +1,30 @@
-import { useEffect, useRef, useState } from 'react'
-function useSearch() {
-	const [search, updateSearch] = useState('')
-	const [error, setError] = useState('')
-	const isFirstImput = useRef(true)
+import debounce from 'just-debounce-it'
+import { PropTypes } from 'prop-types'
+import { useCallback } from 'react'
 
-	useEffect(() => {
-		if (isFirstImput.current) {
-			isFirstImput.current = search === ''
-			return
-		}
-		if (search === '') {
-			setError('no se puede buscar un producto vacio')
-			return
-		}
-		if (search.match(/^\d+$/)) {
-			setError('no se puede buscar un producto con numeros')
-		}
-		if (search.length < 3) {
-			setError('no se puede buscar un producto con menos de 3 caracteres')
-		}
-	}, [search])
-	return [search, updateSearch, error, setError]
-}
-export function Search() {
-	const [search, updateSearch, error] = useSearch()
+export function Search({ search, updateSearch, error, getProducts }) {
+	const debounceGetProducts = useCallback(
+		debounce((search) => {
+			getProducts({
+				search,
+				fetchFunction: 'searchProducts'
+			})
+		}, 300),
+		[getProducts]
+	)
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		console.log({ search })
+		getProducts({
+			search,
+			fetchFunction: 'searchProducts'
+		})
 	}
 	const handleChange = (e) => {
 		const newQuery = e.target.value
 		if (newQuery.startsWith(' ')) return
 		updateSearch(newQuery)
+		debounceGetProducts(newQuery)
 	}
 
 	return (
@@ -72,4 +64,10 @@ export function Search() {
 			{error && <p className="text-red-500">{error}</p>}
 		</div>
 	)
+}
+Search.propTypes = {
+	search: PropTypes.string.isRequired,
+	updateSearch: PropTypes.func.isRequired,
+	error: PropTypes.string.isRequired,
+	getProducts: PropTypes.func.isRequired
 }
