@@ -1,37 +1,62 @@
-import { useCallback, useRef, useState } from 'react'
-import { searchProducts, getProducts } from '../services/products'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { getProducts, searchProducts } from '../services/products'
+import { ProductContext } from '../context'
 
-export function useProducts(options = {}) {
-	const [products, setProducts] = useState([])
+export function useProductSearch({ search }) {
 	const [productsSearch, setProductsSearch] = useState([])
+	const [searchLoading, setSearchLoading] = useState(false)
+	const [error, setError] = useState(null)
+	const previousSearch = useRef(search)
+
+	const fetchProductSearch = useCallback(async ({ search }) => {
+		if (search === previousSearch.current) return
+		try {
+			setSearchLoading(true)
+			setError(null)
+			previousSearch.current = search
+
+			const newProducts = await searchProducts({ search })
+			setProductsSearch(newProducts)
+		} catch (e) {
+			setError(e.message)
+		} finally {
+			setSearchLoading(false)
+		}
+	}, [])
+	productsSearch || setProductsSearch([])
+
+	return { productsSearch, fetchProductSearch, searchLoading, error }
+}
+
+export function useProducts() {
+	const { products, setProducts } = useContext(ProductContext)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(null)
-	const previousOptions = useRef(options)
 
-	const fetchProducts = useCallback(async (options = {}) => {
-		const { search, fetchFunction } = options
-		if (search === previousOptions.current.search && search !== undefined) {
-			return
-		}
+	const fetchProducts = useCallback(async () => {
 		try {
 			setLoading(true)
 			setError(null)
-			previousOptions.current = options
 
-			if (fetchFunction === 'searchProducts') {
-				const newProducts = await searchProducts({ search })
-				setProductsSearch(newProducts)
-			} else if (fetchFunction === 'getProducts') {
+			const storedProducts = localStorage.getItem('products')
+
+			if (storedProducts) {
+				setProducts(JSON.parse(storedProducts))
+			} else {
 				const newProducts = await getProducts()
 				setProducts(newProducts)
+				localStorage.setItem('products', JSON.stringify(newProducts))
 			}
 		} catch (e) {
 			setError(e.message)
 		} finally {
 			setLoading(false)
 		}
-	}, [])
-	productsSearch || setProductsSearch([])
+	}, [setProducts])
 
-	return { products, productsSearch, fetchProducts, loading, error }
+	useEffect(() => {
+		fetchProducts()
+	}, [fetchProducts])
+
+	return { products, fetchProducts, loading, error }
 }

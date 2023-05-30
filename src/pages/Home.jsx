@@ -1,31 +1,21 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ProductContext } from '../context/index'
+import { ProductContext } from '../context/index.jsx'
 import Card from '../components/Card.jsx'
-import { useProducts } from '../hooks/useProducts'
+import { useProductSearch, useProducts } from '../hooks/useProducts'
 import { useSearch } from '../hooks/useSearch'
 import { Search } from '../components/Search'
 
 export default function Home() {
 	const [search, updateSearch, error] = useSearch()
-	const {
-		productsSearch,
-		fetchProducts: fetchSearchProducts,
-		loading: searchLoading
-	} = useProducts({
-		search,
-		fetchFunction: 'searchProducts'
-	})
-	const {
-		products,
-		fetchProducts,
-		loading: allLoading
-	} = useProducts({
-		fetchFunction: 'getProducts'
-	})
+	const { productsSearch, fetchProductSearch, searchLoading } =
+		useProductSearch({ search })
 
-	const { isFavorite, setSelectedProduct, toggleFavorites } =
+	const { loading: allLoading } = useProducts()
+
+	const { products, isFavorite, setSelectedProduct, toggleFavorites } =
 		useContext(ProductContext)
+
 	const navigate = useNavigate()
 
 	const handleProduct = (product) => {
@@ -40,19 +30,8 @@ export default function Home() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		fetchSearchProducts({
-			search,
-			fetchFunction: 'searchProducts'
-		})
+		fetchProductSearch({ search })
 	}
-
-	useEffect(() => {
-		if (search === '') {
-			fetchProducts({
-				fetchFunction: 'getProducts'
-			})
-		}
-	}, [fetchProducts, search])
 
 	return (
 		<div>
@@ -61,7 +40,7 @@ export default function Home() {
 				updateSearch={updateSearch}
 				error={error}
 				handleSubmit={handleSubmit}
-				getProducts={fetchSearchProducts}
+				getProducts={fetchProductSearch}
 			/>
 			<section className="mx-auto grid max-w-5xl grid-cols-2 gap-4 py-11 md:grid-cols-3">
 				{searchLoading || allLoading ? (

@@ -5,20 +5,14 @@ import { useCallback } from 'react'
 export function Search({ search, updateSearch, error, getProducts }) {
 	const debounceGetProducts = useCallback(
 		debounce((search) => {
-			getProducts({
-				search,
-				fetchFunction: 'searchProducts'
-			})
+			getProducts({ search })
 		}, 300),
 		[getProducts]
 	)
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		getProducts({
-			search,
-			fetchFunction: 'searchProducts'
-		})
+		getProducts({ search })
 	}
 	const handleChange = (e) => {
 		const newQuery = e.target.value
