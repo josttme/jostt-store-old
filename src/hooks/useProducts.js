@@ -1,17 +1,16 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { getProducts, searchProducts } from '../services/products'
-import { ProductContext } from '../context'
+import { useCallback, useRef, useState } from 'react'
+import { searchProducts } from '../services/products'
 
 export function useProductSearch({ search }) {
 	const [productsSearch, setProductsSearch] = useState([])
-	const [searchLoading, setSearchLoading] = useState(false)
+	const [loadingSearch, setLoadingSearch] = useState(false)
 	const [error, setError] = useState(null)
 	const previousSearch = useRef(search)
 
 	const fetchProductSearch = useCallback(async ({ search }) => {
 		if (search === previousSearch.current) return
 		try {
-			setSearchLoading(true)
+			setLoadingSearch(true)
 			setError(null)
 			previousSearch.current = search
 
@@ -20,37 +19,25 @@ export function useProductSearch({ search }) {
 		} catch (e) {
 			setError(e.message)
 		} finally {
-			setSearchLoading(false)
+			setLoadingSearch(false)
 		}
 	}, [])
 	productsSearch || setProductsSearch([])
 
-	return { productsSearch, fetchProductSearch, searchLoading, error }
+	return { productsSearch, fetchProductSearch, loadingSearch, error }
 }
+/* 
+export function useCustomProducts() {
+	const [products, setProducts] = useState([])
+	const { data, error, isLoading } = useProducts()
 
-export function useProducts() {
-	const { products, setProducts } = useContext(ProductContext)
-	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState(null)
+	// Puedes realizar cualquier lógica adicional aquí si es necesario
 
-	const fetchProducts = useCallback(async () => {
+	const fetchProducts = useCallback(() => {
 		try {
-			setLoading(true)
-			setError(null)
-
-			const storedProducts = localStorage.getItem('products')
-
-			if (storedProducts) {
-				setProducts(JSON.parse(storedProducts))
-			} else {
-				const newProducts = await getProducts()
-				setProducts(newProducts)
-				localStorage.setItem('products', JSON.stringify(newProducts))
-			}
+			setProducts(data)
 		} catch (e) {
-			setError(e.message)
-		} finally {
-			setLoading(false)
+			console.log(e)
 		}
 	}, [setProducts])
 
@@ -58,5 +45,10 @@ export function useProducts() {
 		fetchProducts()
 	}, [fetchProducts])
 
-	return { products, fetchProducts, loading, error }
+	return {
+		products,
+		error,
+		isLoading
+	}
 }
+ */

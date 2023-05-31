@@ -22,7 +22,7 @@ export async function searchProducts({ search }) {
 	}
 }
 
-export async function getProducts() {
+/* export async function getProducts() {
 	try {
 		const res = await fetch(
 			'https://api.escuelajs.co/api/v1/products?offset=0&limit=10'
@@ -32,4 +32,4 @@ export async function getProducts() {
 	} catch (e) {
 		throw new Error('Error al obtener los productos')
 	}
-}
+} */

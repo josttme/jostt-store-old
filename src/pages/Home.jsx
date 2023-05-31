@@ -2,18 +2,19 @@ import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProductContext } from '../context/index.jsx'
 import Card from '../components/Card.jsx'
-import { useProductSearch, useProducts } from '../hooks/useProducts'
 import { useSearch } from '../hooks/useSearch'
 import { Search } from '../components/Search'
+import { useListOfProducts } from '../hooks/useListOfProducts.js'
+import { useProductSearch } from '../hooks/useProducts.js'
 
 export default function Home() {
 	const [search, updateSearch, error] = useSearch()
-	const { productsSearch, fetchProductSearch, searchLoading } =
+	const { products, loading } = useListOfProducts()
+
+	const { productsSearch, fetchProductSearch, loadingSearch } =
 		useProductSearch({ search })
 
-	const { loading: allLoading } = useProducts()
-
-	const { products, isFavorite, setSelectedProduct, toggleFavorites } =
+	const { isFavorite, setSelectedProduct, toggleFavorites } =
 		useContext(ProductContext)
 
 	const navigate = useNavigate()
@@ -32,7 +33,6 @@ export default function Home() {
 		e.preventDefault()
 		fetchProductSearch({ search })
 	}
-
 	return (
 		<div>
 			<Search
@@ -43,7 +43,7 @@ export default function Home() {
 				getProducts={fetchProductSearch}
 			/>
 			<section className="mx-auto grid max-w-5xl grid-cols-2 gap-4 py-11 md:grid-cols-3">
-				{searchLoading || allLoading ? (
+				{loadingSearch || loading ? (
 					<p>Loading...</p>
 				) : search ? (
 					productsSearch.map((product) => (
