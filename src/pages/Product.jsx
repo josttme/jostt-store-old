@@ -6,13 +6,12 @@ import { useProductById } from '../hooks/useProductId'
 export default function Product() {
 	const { id } = useParams()
 	const productId = parseInt(id, 10)
-	const { selectedProduct, addToCart, isFavorite, toggleFavorites } =
-		useContext(ProductContext)
+	const { addToCart, isFavorite, toggleFavorites } = useContext(ProductContext)
 	const { product, loading } = useProductById({ productId })
 	if (loading) return <p>Cargando...</p>
 	const { image, price, title, description, category } = product
 
-	const isFavorited = isFavorite(selectedProduct)
+	const isFavorited = isFavorite(product)
 	const favorite = isFavorited ? 'fill-red-600 stroke-red-600' : 'fill-none'
 	return (
 		<section className="mx-auto my-28 grid max-w-6xl grid-cols-2 gap-4 overflow-hidden  rounded-lg  bg-white shadow-lg">
@@ -27,7 +26,7 @@ export default function Product() {
 				<div className="flex gap-4">
 					<Link to="/cart">
 						<button
-							onClick={() => addToCart(selectedProduct)}
+							onClick={() => addToCart(product)}
 							className="w-60 rounded-lg  bg-blue-500 p-3 text-white duration-150 hover:bg-blue-600"
 						>
 							Agregar al carrito
@@ -35,7 +34,7 @@ export default function Product() {
 					</Link>
 					<button
 						type="button"
-						onClick={() => toggleFavorites(selectedProduct)}
+						onClick={() => toggleFavorites(product)}
 						className="grid h-12 w-12 place-content-center rounded-full bg-slate-200 stroke-black p-2 shadow-sm transition duration-300 hover:stroke-[red]"
 					>
 						<svg

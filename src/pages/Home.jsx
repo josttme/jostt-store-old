@@ -6,6 +6,7 @@ import { useSearch } from '../hooks/useSearch'
 import { Search } from '../components/Search'
 import { useListOfProducts } from '../hooks/useListOfProducts.js'
 import { useProductSearch } from '../hooks/useProducts.js'
+import { Skeleton } from '../components/Skeleton.jsx'
 
 export default function Home() {
 	const [search, updateSearch, error] = useSearch()
@@ -42,9 +43,10 @@ export default function Home() {
 				handleSubmit={handleSubmit}
 				getProducts={fetchProductSearch}
 			/>
+
 			<section className="mx-auto grid max-w-5xl grid-cols-2 gap-4 py-11 md:grid-cols-3">
 				{loadingSearch || loading ? (
-					<p>Loading...</p>
+					<Skeleton />
 				) : search ? (
 					productsSearch.map((product) => (
 						<Card

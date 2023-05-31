@@ -18,7 +18,6 @@ export const useProductById = ({ productId }) => {
 	const { loading, error, data } = useQuery(GET_PRODUCTS, {
 		variables: { productId }
 	})
-	console.log(data)
 	if (!data) return { loading, error }
 	const product = {
 		id: data.product.id,
@@ -28,6 +27,5 @@ export const useProductById = ({ productId }) => {
 		description: data.product.description,
 		category: data.product.category.name
 	}
-	console.log(product)
 	return { loading, error, product }
 }
