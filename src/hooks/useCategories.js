@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
 
 const GET_PRODUCTS = gql`
-	query Products {
-		products(limit: 30, offset: 0) {
+	query Categories($categoryId: Float) {
+		products(categoryId: $categoryId) {
 			id
 			images
 			price
@@ -14,8 +14,12 @@ const GET_PRODUCTS = gql`
 		}
 	}
 `
-export const useListOfProducts = () => {
-	const { loading, error, data } = useQuery(GET_PRODUCTS)
+export const useCategoryProducts = ({ categoryId }) => {
+	console.log(categoryId)
+	const { loading, error, data } = useQuery(GET_PRODUCTS, {
+		variables: { categoryId }
+	})
+
 	if (!data) return { loading, error }
 	const products = data?.products?.map((product) => {
 		return {

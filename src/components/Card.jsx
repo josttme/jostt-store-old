@@ -5,6 +5,7 @@ export default function Card({
 	title,
 	price,
 	image,
+	category,
 	handleProduct,
 	toggledFavorites,
 	isFavorite
@@ -53,7 +54,7 @@ export default function Card({
 					/>
 				</div>
 				<span className="absolute bottom-0 left-0 m-2 rounded-lg bg-white/60 px-3 py-0.5 text-xs text-black">
-					Electronics
+					{category}
 				</span>
 			</figure>
 			<div className="p-5">
@@ -68,6 +69,7 @@ Card.propTypes = {
 	title: PropTypes.string.isRequired,
 	price: PropTypes.number.isRequired,
 	image: PropTypes.string.isRequired,
+	category: PropTypes.string.isRequired,
 	handleProduct: PropTypes.func.isRequired,
 	toggledFavorites: PropTypes.func.isRequired,
 	isFavorite: PropTypes.bool.isRequired

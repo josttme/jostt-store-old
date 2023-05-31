@@ -19,31 +19,31 @@ export default function Header() {
 					All
 				</NavLink>
 				<NavLink
-					to="/clothes"
-					className={({ isActive }) => (isActive ? activeClass : classDefault)}
-				>
-					Clothes
-				</NavLink>
-				<NavLink
-					to="/electronics"
+					to="/category/electronics-2"
 					className={({ isActive }) => (isActive ? activeClass : classDefault)}
 				>
 					Electronics
 				</NavLink>
 				<NavLink
-					to="/furnitures"
+					to="/category/clothes-4"
+					className={({ isActive }) => (isActive ? activeClass : classDefault)}
+				>
+					Clothes
+				</NavLink>
+				<NavLink
+					to="/category/furnitures-3"
 					className={({ isActive }) => (isActive ? activeClass : classDefault)}
 				>
 					Furnitures
 				</NavLink>
 				<NavLink
-					to="/toys"
+					to="/category/toys-1"
 					className={({ isActive }) => (isActive ? activeClass : classDefault)}
 				>
 					Toys
 				</NavLink>
 				<NavLink
-					to="/others"
+					to="/category/others-5"
 					className={({ isActive }) => (isActive ? activeClass : classDefault)}
 				>
 					Others
