@@ -1,11 +1,16 @@
 import React, { useContext } from 'react'
 import { ProductContext } from '../context'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { useProductById } from '../hooks/useProductId'
 
 export default function Product() {
+	const { id } = useParams()
+	const productId = parseInt(id, 10)
 	const { selectedProduct, addToCart, isFavorite, toggleFavorites } =
 		useContext(ProductContext)
-	const { title, description, price, image } = selectedProduct
+	const { product, loading } = useProductById({ productId })
+	if (loading) return <p>Cargando...</p>
+	const { image, price, title, description, category } = product
 
 	const isFavorited = isFavorite(selectedProduct)
 	const favorite = isFavorited ? 'fill-red-600 stroke-red-600' : 'fill-none'
@@ -17,6 +22,7 @@ export default function Product() {
 			<div className="flex flex-col gap-5 px-5 py-11 ">
 				<h1 className="text-3xl">{title}</h1>
 				<p className="text-lg">{description}</p>
+				<p className="text-lg">{category}</p>
 				<p className="text-4xl">{`$${price}`}</p>
 				<div className="flex gap-4">
 					<Link to="/cart">

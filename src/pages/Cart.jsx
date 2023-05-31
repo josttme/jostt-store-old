@@ -122,7 +122,6 @@ export function CartProduct(product) {
 	)
 }
 CartProduct.propTypes = {
-	id: PropTypes.number.isRequired,
 	title: PropTypes.string.isRequired,
 	price: PropTypes.number.isRequired,
 	image: PropTypes.string.isRequired,

@@ -22,9 +22,7 @@ export const useListOfProducts = () => {
 			id: product.id,
 			title: product.title,
 			price: product.price,
-			description: product.description,
 			category: product.category.name,
-			categoryId: product.category.id,
 			image: product.images[0]
 		}
 	})

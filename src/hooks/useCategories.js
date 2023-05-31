@@ -15,7 +15,6 @@ const GET_PRODUCTS = gql`
 	}
 `
 export const useCategoryProducts = ({ categoryId }) => {
-	console.log(categoryId)
 	const { loading, error, data } = useQuery(GET_PRODUCTS, {
 		variables: { categoryId }
 	})
@@ -26,9 +25,7 @@ export const useCategoryProducts = ({ categoryId }) => {
 			id: product.id,
 			title: product.title,
 			price: product.price,
-			description: product.description,
 			category: product.category.name,
-			categoryId: product.category.id,
 			image: product.images[0]
 		}
 	})
