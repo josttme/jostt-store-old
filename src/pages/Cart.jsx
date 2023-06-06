@@ -45,6 +45,7 @@ export default function Cart() {
 }
 
 export function CartProduct(product) {
+	const [isLoading, setIsLoading] = useState(false)
 	const { title, price, image, quantity } = product
 	const { removeFromCart, increaseQuantity, decreaseQuantity } =
 		useContext(ProductContext)
@@ -62,12 +63,20 @@ export function CartProduct(product) {
 		<li className="flex items-center gap-4">
 			<Link
 				to={`/product/${product.id}`}
-				className="flex gap-4 rounded-md p-2 "
+				className="relative flex gap-4 rounded-md p-2 "
 			>
+				{!isLoading && (
+					<div className=" absolute left-0 top-0 m-2 h-16 w-16 animate-pulse-fast rounded bg-gray-300" />
+				)}
 				<img
 					src={image}
 					alt={title}
-					className="w-h-16 h-16 rounded object-cover"
+					width={100}
+					height={100}
+					className={`${
+						!isLoading && 'opacity-0'
+					} h-16 w-16 rounded object-cover`}
+					onLoad={() => setIsLoading(true)}
 				/>
 				<div className="grid place-content-center">
 					<h3 className="text-lg text-gray-900">{title}</h3>
