@@ -6,8 +6,11 @@ import { useCart } from '../hooks/useCart'
 export const ProductContext = createContext()
 
 export default function ProductProvider({ children }) {
+	const [account, setAccount] = useState(() => {
+		return sessionStorage.getItem('currentCount')
+	})
 	const [isAuth, setIsAuth] = useState(() => {
-		return !!sessionStorage.getItem('currentUser')
+		return !!sessionStorage.getItem('currentCount')
 	})
 	const [products, setProducts] = useState([])
 	const [selectedProduct, setSelectedProduct] = useState([])
@@ -34,6 +37,9 @@ export default function ProductProvider({ children }) {
 		)
 	}, [cartItems])
 
+	const activeAuth = () => {
+		setIsAuth(true)
+	}
 	const valueContext = {
 		selectedProduct,
 		setSelectedProduct,
@@ -48,11 +54,13 @@ export default function ProductProvider({ children }) {
 		isFavorite,
 		products,
 		setProducts,
+		activeAuth,
 		isAuth,
-		setIsAuth
+		setIsAuth,
+		setAccount,
+		account
 	}
 
-	/* prettier-ignore */
 	return (
 		<ProductContext.Provider value={valueContext}>
 			{children}

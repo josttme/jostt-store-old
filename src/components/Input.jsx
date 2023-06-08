@@ -1,6 +1,14 @@
 import { PropTypes } from 'prop-types'
 
-export function Input({ id, name, label, type, placeholder, ...props }) {
+export function Input({
+	id,
+	name,
+	label,
+	type,
+	placeholder,
+	messageError,
+	...props
+}) {
 	return (
 		<fieldset className='className="mx-auto text-center" max-w-5xl'>
 			<label
@@ -10,7 +18,9 @@ export function Input({ id, name, label, type, placeholder, ...props }) {
 				{label}
 			</label>
 			<input
-				className="w-full rounded-lg border-2 border-gray-300 p-4 pe-12 text-sm shadow-sm"
+				className={`${
+					messageError && 'border-red-500'
+				} w-full rounded-lg border-2 border-gray-300 p-4 pe-12 text-sm shadow-sm`}
 				type={type}
 				id={id}
 				name={name}
@@ -18,6 +28,7 @@ export function Input({ id, name, label, type, placeholder, ...props }) {
 				{...props}
 				required
 			/>
+			{messageError && <p className="text-red-500">{messageError}</p>}
 		</fieldset>
 	)
 }
@@ -26,5 +37,6 @@ Input.propTypes = {
 	name: PropTypes.string.isRequired,
 	label: PropTypes.string.isRequired,
 	type: PropTypes.string.isRequired,
-	placeholder: PropTypes.string.isRequired
+	placeholder: PropTypes.string.isRequired,
+	messageError: PropTypes.string
 }
