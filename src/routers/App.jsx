@@ -9,8 +9,8 @@ import Favorites from '../pages/Favorites'
 import NotFound from '../pages/NotFound'
 import Categories from '../pages/Categories'
 import { ProtectedRoute } from '../pages/ProtecteRoute'
-import { Signup } from '../pages/Signup'
-import { Login } from '../pages/Login'
+import { LogIn } from '../pages/LogIn'
+import { SignUp } from '../pages/SignUp'
 
 const client = new ApolloClient({
 	uri: 'https://api.escuelajs.co/graphql',
@@ -27,8 +27,8 @@ export default function App() {
 							<Route index element={<Home />} />
 							<Route path="/product/:id" element={<Product />} />
 							<Route path="/category/:id" element={<Categories />} />
-							<Route path="/signup" element={<Signup />} />
-							<Route path="/login" element={<Login />} />
+							<Route path="/signup" element={<SignUp />} />
+							<Route path="/login" element={<LogIn />} />
 							<Route
 								path="/favorites"
 								element={<ProtectedRoute element={<Favorites />} />}

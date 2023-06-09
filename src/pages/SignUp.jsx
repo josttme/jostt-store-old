@@ -1,9 +1,10 @@
 import { AccountMessage } from '../components/AccountMessage'
 import { Input } from '../components/Input'
 import { Button } from '../components/Button'
-import { useSignUp } from '../hooks/useAuth'
+import { useAuth } from '../hooks/useAuth'
 
-export function Signup() {
+export function SignUp() {
+	const { signUp } = useAuth()
 	const {
 		username,
 		email,
@@ -19,7 +20,7 @@ export function Signup() {
 		handleUsernameBlur,
 		handleEmailBlur,
 		handlePasswordBlur
-	} = useSignUp()
+	} = signUp()
 
 	return (
 		<section className="mb-28 flex-grow space-y-6 pt-16">
