@@ -11,6 +11,7 @@ import Categories from '../pages/Categories'
 import { PrivateRoute } from '../pages/PrivateRoute'
 import { LogIn } from '../pages/LogIn'
 import { SignUp } from '../pages/SignUp'
+import { User } from '../pages/User'
 
 const client = new ApolloClient({
 	uri: 'https://api.escuelajs.co/graphql',
@@ -33,6 +34,7 @@ export default function App() {
 								path="/favorites"
 								element={<PrivateRoute route={<Favorites />} />}
 							/>
+							<Route path="/user" element={<PrivateRoute route={<User />} />} />
 							<Route path="/cart" element={<PrivateRoute route={<Cart />} />} />
 						</Route>
 						<Route path="*" element={<NotFound />} />

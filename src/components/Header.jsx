@@ -83,7 +83,7 @@ export default function Header() {
 						to="/user"
 						className={({ isActive }) =>
 							isActive
-								? activeClass
+								? `${activeClass} flex gap-1`
 								: 'flex gap-1 rounded-md p-1 px-2 duration-150  hover:bg-gray-300 '
 						}
 					>
