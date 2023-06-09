@@ -8,7 +8,7 @@ import Cart from '../pages/Cart'
 import Favorites from '../pages/Favorites'
 import NotFound from '../pages/NotFound'
 import Categories from '../pages/Categories'
-import { ProtectedRoute } from '../pages/ProtecteRoute'
+import { PrivateRoute } from '../pages/PrivateRoute'
 import { LogIn } from '../pages/LogIn'
 import { SignUp } from '../pages/SignUp'
 
@@ -31,12 +31,9 @@ export default function App() {
 							<Route path="/login" element={<LogIn />} />
 							<Route
 								path="/favorites"
-								element={<ProtectedRoute element={<Favorites />} />}
+								element={<PrivateRoute route={<Favorites />} />}
 							/>
-							<Route
-								path="/cart"
-								element={<ProtectedRoute element={<Cart />} />}
-							/>
+							<Route path="/cart" element={<PrivateRoute route={<Cart />} />} />
 						</Route>
 						<Route path="*" element={<NotFound />} />
 					</Routes>

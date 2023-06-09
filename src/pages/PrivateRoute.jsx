@@ -3,14 +3,14 @@ import { useContext } from 'react'
 import { Navigate } from 'react-router-dom'
 import { ProductContext } from '../context'
 
-export function ProtectedRoute({ children }) {
+export function PrivateRoute({ route }) {
 	const { isAuth } = useContext(ProductContext)
 
 	if (!isAuth) return <Navigate to="/login" />
 
-	return children
+	return route
 }
 
-ProtectedRoute.propTypes = {
-	children: PropTypes.node
+PrivateRoute.propTypes = {
+	route: PropTypes.node.isRequired
 }

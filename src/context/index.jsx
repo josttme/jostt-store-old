@@ -7,8 +7,13 @@ export const ProductContext = createContext()
 
 export default function ProductProvider({ children }) {
 	const [account, setAccount] = useState(() => {
-		return sessionStorage.getItem('currentCount')
+		const storedAccount = sessionStorage.getItem('currentCount')
+		const accountWithoutQuotes = storedAccount
+			? storedAccount.replace(/['"]+/g, '')
+			: ''
+		return accountWithoutQuotes
 	})
+
 	const [isAuth, setIsAuth] = useState(() => {
 		return !!sessionStorage.getItem('currentCount')
 	})
