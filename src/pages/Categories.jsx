@@ -9,7 +9,7 @@ export default function Categories() {
 	const { id } = useParams()
 	const categoryId = parseInt(id.split('-')[1], 10)
 	const { loading, products } = useCategoryProducts({ categoryId })
-	const { isFavorite, setSelectedProduct, toggleFavorites } =
+	const { isFavorite, setSelectedProduct, toggleFavorite } =
 		useContext(ProductContext)
 
 	const navigate = useNavigate()
@@ -21,7 +21,7 @@ export default function Categories() {
 
 	const toggledFavorites = (e, product) => {
 		e.stopPropagation()
-		toggleFavorites(product)
+		toggleFavorite(product)
 	}
 
 	return (

@@ -2,12 +2,15 @@ import { useContext } from 'react'
 import { ProductContext } from '../context'
 
 export function User() {
-	const { account, setIsAuth, setAccount } = useContext(ProductContext)
+	const { account, setIsAuth, setAccount, setFavorites, setAccountData } =
+		useContext(ProductContext)
 
 	const handleLogout = () => {
 		setIsAuth(false)
 		sessionStorage.removeItem('currentCount')
 		setAccount('')
+		setFavorites([])
+		setAccountData({})
 	}
 
 	const handleDeleteUser = () => {
@@ -17,6 +20,8 @@ export function User() {
 		setIsAuth(false)
 		sessionStorage.removeItem('currentCount')
 		setAccount('')
+		setFavorites([])
+		setAccountData({})
 	}
 
 	return (

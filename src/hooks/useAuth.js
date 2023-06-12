@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { ProductContext } from '../context'
 import { useNavigate } from 'react-router-dom'
+import { useLocalStorage } from './useLocalStorage'
 
 export function useAuth() {
-	const { setAccount, activeAuth } = useContext(ProductContext)
+	const [accounts, setState] = useLocalStorage('accountsStore')
+	const { setAccount, activeAuth, setAccountData, accountData } =
+		useContext(ProductContext)
 	const [username, setUsername] = useState('')
 	const [usernameError, setUsernameError] = useState('')
 	const [email, setEmail] = useState('')
@@ -13,9 +16,15 @@ export function useAuth() {
 	const [formError, setFormError] = useState('')
 	const [shouldRedirect, setShouldRedirect] = useState(false)
 	const navigate = useNavigate()
-
-	const accounts = JSON.parse(localStorage.getItem('accountsStore')) || []
-
+	useEffect(() => {
+		setUsername('')
+		setEmail('')
+		setPassword('')
+	}, [accountData])
+	/* 	const accounts = getUsersFromLocalStorage()
+	function getUsersFromLocalStorage() {
+		return JSON.parse(localStorage.getItem('accountsStore')) || []
+	} */
 	const handleInputChange = (e, setter, regex) => {
 		const value = e.target.value
 			.slice(0, 30)
@@ -148,8 +157,9 @@ export function useAuth() {
 				cart: []
 			}
 			const updatedAccounts = [...accounts, newAccount]
-
-			localStorage.setItem('accountsStore', JSON.stringify(updatedAccounts))
+			setAccountData(updatedAccounts)
+			setState(updatedAccounts)
+			/* 		localStorage.setItem('accountsStore', JSON.stringify(updatedAccounts)) */
 			sessionStorage.setItem('currentCount', JSON.stringify(username))
 			setAccount(username)
 			activeAuth()

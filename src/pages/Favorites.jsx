@@ -4,9 +4,8 @@ import Card from '../components/Card'
 import { useNavigate } from 'react-router-dom'
 
 export default function Favorites() {
-	const { favoritos, setSelectedProduct, toggleFavorites } =
+	const { favorites, setSelectedProduct, toggleFavorite } =
 		useContext(ProductContext)
-
 	const navigate = useNavigate()
 	const handleProduct = (product) => {
 		setSelectedProduct(product)
@@ -14,12 +13,12 @@ export default function Favorites() {
 	}
 	const toggledFavorites = (e, product) => {
 		e.stopPropagation()
-		toggleFavorites(product)
+		toggleFavorite(product)
 	}
 	return (
 		<div className="flex-grow ">
 			<div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 py-11 md:grid-cols-3">
-				{favoritos.map((product) => (
+				{favorites.map((product) => (
 					<Card
 						key={product.id}
 						{...product}

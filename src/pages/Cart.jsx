@@ -1,4 +1,7 @@
-import { PropTypes } from 'prop-types'
+export default function Cart() {
+	return <div>hola</div>
+}
+/* import { PropTypes } from 'prop-types'
 import { useContext, useEffect, useState } from 'react'
 import { ProductContext } from '../context'
 import { Link } from 'react-router-dom'
@@ -136,3 +139,4 @@ CartProduct.propTypes = {
 	image: PropTypes.string.isRequired,
 	quantity: PropTypes.number.isRequired
 }
+ */

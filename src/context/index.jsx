@@ -3,9 +3,10 @@ import { createContext, useEffect, useState } from 'react'
 import { useFavotites } from '../hooks/useFavorites'
 import { useCart } from '../hooks/useCart'
 
-export const ProductContext = createContext()
+export const ProductContext = createContext({ isAuth: false })
 
 export default function ProductProvider({ children }) {
+	const [accountData, setAccountData] = useState({})
 	const [account, setAccount] = useState(() => {
 		const storedAccount = sessionStorage.getItem('currentCount')
 		const accountWithoutQuotes = storedAccount
@@ -13,7 +14,6 @@ export default function ProductProvider({ children }) {
 			: ''
 		return accountWithoutQuotes
 	})
-
 	const [isAuth, setIsAuth] = useState(() => {
 		return !!sessionStorage.getItem('currentCount')
 	})
@@ -21,22 +21,35 @@ export default function ProductProvider({ children }) {
 	const [selectedProduct, setSelectedProduct] = useState([])
 	const [quantityProducts, setQuantityProducts] = useState(0)
 
-	const [favoritos, toggleFavorites] = useFavotites('store_favorites')
+	const [usersList, toggleFavorite] = useFavotites(
+		'accountsStore',
+		account,
+		accountData
+	)
+	const [favorites, setFavorites] = useState(usersList)
+	useEffect(() => {
+		if (!account && !usersList) return
+		const currentUser = usersList.find((user) => {
+			return user.username === account
+		})
+		if (!currentUser) return
+
+		setFavorites(currentUser.favorites)
+	}, [usersList])
 	const [
 		cartItems,
 		addToCart,
 		removeFromCart,
 		increaseQuantity,
 		decreaseQuantity
-	] = useCart('store_cart')
-
+	] = useCart('accountsStore')
 	const isFavorite = (product) => {
-		return favoritos.some((item) => item.id === product.id)
+		return favorites.some((item) => item.id === product.id)
 	}
 	useEffect(() => {
 		// Suma el total de la cantidad de productos en el carrito
 		setQuantityProducts(
-			cartItems.reduce((setQuantityProducts, item) => {
+			cartItems?.reduce((setQuantityProducts, item) => {
 				return setQuantityProducts + item.quantity
 			}, 0)
 		)
@@ -48,8 +61,8 @@ export default function ProductProvider({ children }) {
 	const valueContext = {
 		selectedProduct,
 		setSelectedProduct,
-		favoritos,
-		toggleFavorites,
+		favorites,
+		toggleFavorite,
 		cartItems,
 		addToCart,
 		removeFromCart,
@@ -63,7 +76,10 @@ export default function ProductProvider({ children }) {
 		isAuth,
 		setIsAuth,
 		setAccount,
-		account
+		account,
+		setAccountData,
+		setFavorites,
+		accountData
 	}
 
 	return (

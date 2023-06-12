@@ -15,7 +15,7 @@ export default function Home() {
 	const { productsSearch, fetchProductSearch, loadingSearch } =
 		useProductSearch({ search })
 
-	const { isFavorite, setSelectedProduct, toggleFavorites } =
+	const { isFavorite, setSelectedProduct, toggleFavorite } =
 		useContext(ProductContext)
 
 	const navigate = useNavigate()
@@ -27,7 +27,7 @@ export default function Home() {
 
 	const toggledFavorites = (e, product) => {
 		e.stopPropagation()
-		toggleFavorites(product)
+		toggleFavorite(product)
 	}
 
 	const handleSubmit = (e) => {
