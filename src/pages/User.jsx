@@ -2,32 +2,30 @@ import { useContext } from 'react'
 import { ProductContext } from '../context'
 
 export function User() {
-	const { account, setIsAuth, setAccount, setFavorites, setAccountData } =
+	const { currentUser, setCurrentUser, setIsAuth, accounts, setAccounts } =
 		useContext(ProductContext)
 
 	const handleLogout = () => {
 		setIsAuth(false)
+		setCurrentUser('')
 		sessionStorage.removeItem('currentCount')
-		setAccount('')
-		setFavorites([])
-		setAccountData({})
 	}
 
 	const handleDeleteUser = () => {
-		const users = JSON.parse(localStorage.getItem('accountsStore')) || []
-		const updatedUsers = users.filter((user) => user.username !== account)
-		localStorage.setItem('accountsStore', JSON.stringify(updatedUsers))
+		const updatedUsers = accounts.filter(
+			(user) => user.username !== currentUser
+		)
+		console.log(updatedUsers)
+		setAccounts(updatedUsers)
 		setIsAuth(false)
+		setCurrentUser('')
 		sessionStorage.removeItem('currentCount')
-		setAccount('')
-		setFavorites([])
-		setAccountData({})
 	}
 
 	return (
 		<section className="flex flex-grow flex-col items-center  gap-2 pt-5">
 			<h2 className="py-5 text-center text-2xl font-bold lg:text-3xl">
-				Hola! {account}
+				Hola! {currentUser}
 			</h2>
 			<button
 				type="button"

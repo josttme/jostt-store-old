@@ -1,13 +1,11 @@
-export default function Cart() {
-	return <div>hola</div>
-}
-/* import { PropTypes } from 'prop-types'
+import { PropTypes } from 'prop-types'
 import { useContext, useEffect, useState } from 'react'
 import { ProductContext } from '../context'
 import { Link } from 'react-router-dom'
 
 export default function Cart() {
 	const { cartItems, quantityProducts } = useContext(ProductContext)
+	console.log(cartItems)
 	const calculateCartTotalPrice = (cartItems) => {
 		return cartItems.reduce((totalPrice, item) => {
 			return totalPrice + item.price * item.quantity
@@ -139,4 +137,3 @@ CartProduct.propTypes = {
 	image: PropTypes.string.isRequired,
 	quantity: PropTypes.number.isRequired
 }
- */

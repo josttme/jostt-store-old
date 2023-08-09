@@ -1,11 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
-import { ProductContext } from '../context'
 import { useNavigate } from 'react-router-dom'
-import { useLocalStorage } from './useLocalStorage'
+import { ProductContext } from '../context'
 
 export function useAuth() {
-	const [accounts, setState] = useLocalStorage('accountsStore')
-	const { setAccount, activeAuth, setAccountData, accountData } =
+	const { setCurrentUser, activeAuth, accounts, setAccounts } =
 		useContext(ProductContext)
 	const [username, setUsername] = useState('')
 	const [usernameError, setUsernameError] = useState('')
@@ -16,15 +14,7 @@ export function useAuth() {
 	const [formError, setFormError] = useState('')
 	const [shouldRedirect, setShouldRedirect] = useState(false)
 	const navigate = useNavigate()
-	useEffect(() => {
-		setUsername('')
-		setEmail('')
-		setPassword('')
-	}, [accountData])
-	/* 	const accounts = getUsersFromLocalStorage()
-	function getUsersFromLocalStorage() {
-		return JSON.parse(localStorage.getItem('accountsStore')) || []
-	} */
+
 	const handleInputChange = (e, setter, regex) => {
 		const value = e.target.value
 			.slice(0, 30)
@@ -157,11 +147,9 @@ export function useAuth() {
 				cart: []
 			}
 			const updatedAccounts = [...accounts, newAccount]
-			setAccountData(updatedAccounts)
-			setState(updatedAccounts)
-			/* 		localStorage.setItem('accountsStore', JSON.stringify(updatedAccounts)) */
+			setAccounts(updatedAccounts)
 			sessionStorage.setItem('currentCount', JSON.stringify(username))
-			setAccount(username)
+			setCurrentUser(username)
 			activeAuth()
 			setShouldRedirect(true)
 		}
@@ -184,6 +172,9 @@ export function useAuth() {
 			handlePasswordBlur
 		}
 	}
+	/********************************
+	 * Log In
+	 ********************************/
 	const logIn = () => {
 		const [userNameEmail, setUserNameEmail] = useState('')
 		const [userNameEmailError, setUserNameEmailError] = useState('')
@@ -235,7 +226,6 @@ export function useAuth() {
 			} else {
 				setFormError('')
 			}
-			console.log((emailExists || usernameExists) && passwordExists)
 			return (emailExists || usernameExists) && passwordExists
 		}
 		const getUsername = (usernameOrEmail) => {
@@ -263,7 +253,7 @@ export function useAuth() {
 			formReset()
 			sessionStorage.setItem('currentCount', JSON.stringify(username))
 
-			setAccount(username)
+			setCurrentUser(username)
 			activeAuth()
 			setShouldRedirect(true)
 		}

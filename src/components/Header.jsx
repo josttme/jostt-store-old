@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { ProductContext } from '../context'
 
 export default function Header() {
-	const { quantityProducts, account } = useContext(ProductContext)
+	const { quantityProducts, currentUser } = useContext(ProductContext)
 	const activeClass = 'decoration-2 underline-offset-2 underline p-1 px-2'
 	const classDefault = 'rounded-md p-1 px-2 duration-150 hover:bg-gray-300'
 	return (
@@ -57,7 +57,7 @@ export default function Header() {
 				>
 					Favorites
 				</NavLink>
-				{!account ? (
+				{!currentUser ? (
 					<>
 						<NavLink
 							to="/login"
@@ -87,7 +87,7 @@ export default function Header() {
 								: 'flex gap-1 rounded-md p-1 px-2 duration-150  hover:bg-gray-300 '
 						}
 					>
-						<span>{account}</span>
+						<span>{currentUser}</span>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"

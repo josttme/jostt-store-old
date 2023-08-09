@@ -7,7 +7,7 @@ import { SkeletonProduct } from '../components/SkeletonProduct'
 export default function Product() {
 	const { id } = useParams()
 	const productId = parseInt(id, 10)
-	const { addToCart, isFavorite, toggleFavorites } = useContext(ProductContext)
+	const { addToCart, isFavorite, toggleFavorite } = useContext(ProductContext)
 	const { product, loading } = useProductById({ productId })
 	if (loading) return <SkeletonProduct />
 
@@ -15,6 +15,11 @@ export default function Product() {
 
 	const isFavorited = isFavorite(product)
 	const favorite = isFavorited ? 'fill-red-600 stroke-red-600' : 'fill-none'
+
+	const toggledFavorites = (product) => {
+		toggleFavorite(product)
+	}
+
 	return (
 		<section className=" mx-auto my-28 grid max-w-6xl grid-cols-2 gap-4 overflow-hidden  rounded-lg  bg-white shadow-lg">
 			<figure className="grid h-[570px] w-[570px] place-content-center shadow-lg">
@@ -36,7 +41,7 @@ export default function Product() {
 					</Link>
 					<button
 						type="button"
-						onClick={() => toggleFavorites(product)}
+						onClick={() => toggledFavorites(product)}
 						className="grid h-12 w-12 place-content-center rounded-full bg-slate-200 stroke-black p-2 shadow-sm transition duration-300 hover:stroke-[red]"
 					>
 						<svg

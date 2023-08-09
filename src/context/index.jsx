@@ -1,19 +1,20 @@
 import { PropTypes } from 'prop-types'
 import { createContext, useEffect, useState } from 'react'
-import { useFavotites } from '../hooks/useFavorites'
 import { useCart } from '../hooks/useCart'
+import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useFavorites } from '../hooks/useFavorites'
 
-export const ProductContext = createContext({ isAuth: false })
+export const ProductContext = createContext()
 
 export default function ProductProvider({ children }) {
-	const [accountData, setAccountData] = useState({})
-	const [account, setAccount] = useState(() => {
-		const storedAccount = sessionStorage.getItem('currentCount')
-		const accountWithoutQuotes = storedAccount
-			? storedAccount.replace(/['"]+/g, '')
-			: ''
-		return accountWithoutQuotes
+	const [accounts, setAccounts] = useLocalStorage('accountsStore')
+
+	const [currentUser, setCurrentUser] = useState(() => {
+		const storedUsername = sessionStorage.getItem('currentCount')
+		const username = storedUsername ? storedUsername.replace(/['"]+/g, '') : ''
+		return username
 	})
+
 	const [isAuth, setIsAuth] = useState(() => {
 		return !!sessionStorage.getItem('currentCount')
 	})
@@ -21,36 +22,35 @@ export default function ProductProvider({ children }) {
 	const [selectedProduct, setSelectedProduct] = useState([])
 	const [quantityProducts, setQuantityProducts] = useState(0)
 
-	const [usersList, toggleFavorite] = useFavotites(
-		'accountsStore',
-		account,
-		accountData
-	)
-	const [favorites, setFavorites] = useState(usersList)
-	useEffect(() => {
-		if (!account && !usersList) return
-		const currentUser = usersList.find((user) => {
-			return user.username === account
-		})
-		if (!currentUser) return
+	const [favorites, setFavorites] = useState([])
 
-		setFavorites(currentUser.favorites)
-	}, [usersList])
+	useEffect(() => {
+		if (!currentUser && !accounts) return
+		const username = accounts.find((user) => {
+			return user.username === currentUser
+		})
+		if (!username) return
+
+		setFavorites(username.favorites)
+	}, [accounts, currentUser])
+
 	const [
 		cartItems,
 		addToCart,
 		removeFromCart,
 		increaseQuantity,
 		decreaseQuantity
-	] = useCart('accountsStore')
+	] = useCart('accountsStore', currentUser)
+	console.log(cartItems)
 	const isFavorite = (product) => {
 		return favorites.some((item) => item.id === product.id)
 	}
 	useEffect(() => {
 		// Suma el total de la cantidad de productos en el carrito
 		setQuantityProducts(
-			cartItems?.reduce((setQuantityProducts, item) => {
-				return setQuantityProducts + item.quantity
+			cartItems?.reduce((quantityProducts, item) => {
+				console.log(item.quantity)
+				return quantityProducts + item.quantity
 			}, 0)
 		)
 	}, [cartItems])
@@ -58,6 +58,9 @@ export default function ProductProvider({ children }) {
 	const activeAuth = () => {
 		setIsAuth(true)
 	}
+
+	const toggleFavorite = useFavorites(accounts, setAccounts, currentUser)
+
 	const valueContext = {
 		selectedProduct,
 		setSelectedProduct,
@@ -75,11 +78,11 @@ export default function ProductProvider({ children }) {
 		activeAuth,
 		isAuth,
 		setIsAuth,
-		setAccount,
-		account,
-		setAccountData,
+		setCurrentUser,
+		currentUser,
 		setFavorites,
-		accountData
+		accounts,
+		setAccounts
 	}
 
 	return (
